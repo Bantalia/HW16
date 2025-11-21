@@ -1,39 +1,21 @@
 package org.skypro.skyshop.product;
 
-public class Product {
-    private String name;
-    private double price;
-    private int quantity;
+public abstract class Product {
+    protected String name;
 
-    public Product(String name, double price, int quantity) {
+    public Product(String name) {
         this.name = name;
-        this.price = price;
-        this.quantity = quantity;
     }
 
-    // Геттеры и сеттеры
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public abstract int getPrice();
 
-    public double getPrice() {
-        return price;
-    }
+    public abstract boolean isSpecial();
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+    @Override
+    public abstract String toString();
 }
 

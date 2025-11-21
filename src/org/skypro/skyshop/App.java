@@ -1,6 +1,9 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.FixPriceProduct;
+import org.skypro.skyshop.product.DiscountedProduct;
+import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.basket.ProductBasket;
 
 public class App {
@@ -10,12 +13,13 @@ public class App {
         ProductBasket basket = new ProductBasket();
 
         // Создаем продукты
-        Product apple = new Product("Яблоко", 50,5);
-        Product bread = new Product("Хлеб", 30,1);
-        Product milk = new Product("Молоко", 70,2);
-        Product cheese = new Product("Сыр", 100,200);
-        Product butter = new Product("Масло", 80,3);
-        Product orange = new Product("Апельсин", 60,4);
+        Product apple = new SimpleProduct("Яблоко", 50);
+        Product bread = new DiscountedProduct("Хлеб", 30, 20);
+        Product milk = new FixPriceProduct("Молоко");
+        Product cheese = new DiscountedProduct("Сыр", 100, 20);
+        Product butter = new FixPriceProduct("Масло");
+        Product orange = new SimpleProduct("Апельсин", 60);
+
 
         // Добавляем продукты в корзину
         basket.addProduct(apple);
@@ -28,28 +32,8 @@ public class App {
         basket.addProduct(orange);  // Выведет "Невозможно добавить продукт"
 
         // Печать содержимого корзины
-        basket.printProducts();
+        basket.printReceipt();
 
-        // Получение стоимости корзины
-        System.out.println("Общая стоимость: " + basket.getTotalPrice());
-
-        // Поиск товара, который есть в корзине
-        System.out.println("Есть ли хлеб? " + basket.containsProduct("Хлеб"));
-
-        // Поиск товара, которого нет в корзине
-        System.out.println("Есть ли апельсин? " + basket.containsProduct("Апельсин"));
-
-        // Очистка корзины
-        basket.clear();
-
-        // Печать пустой корзины
-        basket.printProducts();
-
-        // Получение стоимости пустой корзины
-        System.out.println("Общая стоимость: " + basket.getTotalPrice());
-
-        // Поиск товара в пустой корзине
-        System.out.println("Есть ли хлеб? " + basket.containsProduct("Хлеб"));
     }
 }
 
