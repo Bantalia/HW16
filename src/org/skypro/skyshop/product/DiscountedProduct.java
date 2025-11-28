@@ -8,8 +8,16 @@ public class DiscountedProduct extends Product {
     public DiscountedProduct(String name, int basePrice, int discountPercent) {
         super(name);
         this.basePrice = basePrice;
+
+        if(discountPercent< 0 || discountPercent> 100) { // скидка должна быть от 0% до 100%
+            throw new IllegalArgumentException("Процент скидки должен находиться в пределах от 0 до 100 включительно.");
+    }
         this.discountPercent = discountPercent;
     }
+    public int getDiscountPercentage() {
+        return discountPercent;
+    }
+
     @Override
     public int getPrice() {
         return basePrice * (100 - discountPercent) / 100;

@@ -1,17 +1,17 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.article.Article;
+import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.product.DiscountedProduct;
+import org.skypro.skyshop.product.FixPriceProduct;
+import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.searchable.SearchEngine;
+import org.skypro.skyshop.searchable.Searchable;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.skypro.skyshop.product.Product;
-import org.skypro.skyshop.product.FixPriceProduct;
-import org.skypro.skyshop.product.DiscountedProduct;
-import org.skypro.skyshop.product.SimpleProduct;
-import org.skypro.skyshop.basket.ProductBasket;
-import org.skypro.skyshop.article.Article;
-import org.skypro.skyshop.searchable.Searchable;
-import org.skypro.skyshop.searchable.SearchEngine;
 
 public class App {
     public static void main(String[] args) {
@@ -20,6 +20,7 @@ public class App {
         SearchEngine searchEngine = new SearchEngine(10);
 
         ProductBasket basket = new ProductBasket();
+
 
         // Создаем продукты
         Product apple = new SimpleProduct("Яблоко", 50);
@@ -37,6 +38,36 @@ public class App {
         basket.addProduct(cheese);
         basket.addProduct(butter);
         basket.addProduct(orange);
+
+// Тестируем ошибку
+        try {
+            Product meet = new DiscountedProduct("Мясо", -100, 30);
+            System.out.println("Добавлен продукт " + meet);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка у продукта " + e.getMessage());
+        }
+        try {
+            Product juice = new SimpleProduct(" ", -100);
+            System.out.println("Добавлен продукт " + juice);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка у продукта " + e.getMessage());
+        }
+
+        try {
+            // Тестируем ошибку с ценой
+            SimpleProduct simpleProduct = new SimpleProduct("Яблоко", 0);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage()); // Ожидаемый вывод: Цена продукта должна быть положительной величиной.
+        }
+
+        try {
+            // Тестируем ошибку с неправильной скидкой
+            DiscountedProduct discountedProduct = new DiscountedProduct("Сыр", 100, 150);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage()); // Ожидаемый вывод: Процент скидки должен находиться в пределах от 0 до 100 включительно.
+        }
+
 
         // Попытка добавить продукт в заполненную корзину
         basket.addProduct(orange);  // Выведет "Невозможно добавить продукт"
