@@ -1,9 +1,14 @@
 package org.skypro.skyshop.searchable;
 
+import java.util.List;
+
+
 public interface Searchable {
+
 
     // Возвращает термин поиска
     String getSearchTerm();
+
 
     // Возвращает тип найденного контента
     String getType();
@@ -21,4 +26,6 @@ public interface Searchable {
         return getName() + " — тип " + getType();
     }
 
+
 }
+

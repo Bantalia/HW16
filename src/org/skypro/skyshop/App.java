@@ -6,6 +6,7 @@ import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.searchable.BestResultNotFound;
 import org.skypro.skyshop.searchable.SearchEngine;
 import org.skypro.skyshop.searchable.Searchable;
 
@@ -23,6 +24,7 @@ public class App {
 
 
         // Создаем продукты
+
         Product apple = new SimpleProduct("Яблоко", 50);
         Product bread = new DiscountedProduct("Хлеб", 30, 20);
         Product milk = new FixPriceProduct("Молоко");
@@ -86,6 +88,7 @@ public class App {
 
 
         //Создаем статьи
+
         Article a1 = new Article("Страна производитель", "Казахстан ");
         Article a2 = new Article("Страна производитель", "Россия ");
         Article a3 = new Article("Страна производитель", "Турция");
@@ -94,6 +97,7 @@ public class App {
         Article a6 = new Article("Страна производитель", "Китай");
 
         // Добавляем статьи в поисковик
+
         searchEngine.add(a1);
         searchEngine.add(a2);
         searchEngine.add(a3);
@@ -103,6 +107,7 @@ public class App {
 
 
         // Поиск
+
 
         searchAndPrint(searchEngine, "Яблоко");
         searchAndPrint(searchEngine, "Хлеб");
@@ -129,9 +134,32 @@ public class App {
         System.out.println();
 
 
+// Создаём список для поиска
+        ArrayList<Searchable> productList = new ArrayList<>();
+        productList.add (new SimpleProduct("Яблоко", 50));
+        productList.add (new DiscountedProduct("Хлеб", 30, 20));
+        productList.add (new FixPriceProduct("Молоко"));
+        productList.add (new DiscountedProduct("Сыр", 100, 20));
+        productList.add (new FixPriceProduct("Масло"));
+        productList.add (new SimpleProduct("Апельсин", 60));
+
+        SearchEngine searchEngine = new SearchEngine (productList);
+
+        // 1) Поиск с успешным результатом
+        try {
+            Searchable found = searchEngine.findBestMatch("Мол");
+            System.out.println("Найден лучший объект: " + found.getSearchTerm());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка поиска: " + e.getMessage());
+        }
+
+        // 2) Поиск без результатов - вызовет исключение
+        try {
+            Searchable found = searchEngine.findBestMatch("Йогурт");
+            System.out.println("Найден лучший объект: " + found.getSearchTerm());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка поиска: " + e.getMessage());
+        }
     }
-
-
 }
-
 

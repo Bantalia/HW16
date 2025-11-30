@@ -1,7 +1,7 @@
 package org.skypro.skyshop.searchable;
-
+import java.util.List;
 public class SearchEngine {
-    private final Searchable[] elements;
+    public Searchable[] elements;
     private int currentIndex = 0;
 
     public SearchEngine(int size) {
@@ -13,7 +13,6 @@ public class SearchEngine {
         if (currentIndex < elements.length) {
             elements[currentIndex++] = item;
         }
-        else System.out.println("Невозможно добавить");
     }
 
     // Поиск по поисковому термину, возвращает максимум 5 результатов
@@ -29,5 +28,45 @@ public class SearchEngine {
             }
         }
         return results;
+    }
+    private List<Searchable> items;
+
+    public SearchEngine(List<Searchable> items) {
+        this.items = items;
+    }
+    public  Searchable findBestMatch(String search) throws BestResultNotFound {
+        if (search == null || search.isEmpty()) {
+            throw new BestResultNotFound(search);
+        }
+
+        Searchable bestItem = null;
+        int maxCount = 0;
+
+        for (Searchable item : items) {
+            int count = countOccurrences(item.getSearchTerm(), search);
+            if (count > maxCount) {
+                maxCount = count;
+                bestItem = item;
+            }
+        }
+
+        if (bestItem == null || maxCount == 0) {
+            throw new BestResultNotFound(search);
+        }
+
+        return bestItem;
+    }
+
+    // Подсчет вхождений подстроки в строке
+    private int countOccurrences(String str, String substring) {
+        if (str == null || substring == null || substring.isEmpty())
+            return 0;
+        int count = 0;
+        int index = 0;
+        while ((index = str.indexOf(substring, index)) != -1) {
+            count++;
+            index += substring.length();
+        }
+        return count;
     }
 }
