@@ -1,5 +1,7 @@
 package org.skypro.skyshop.product;
-
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.skypro.skyshop.searchable.Searchable;
 
 public class DiscountedProduct extends Product {
@@ -22,10 +24,7 @@ public class DiscountedProduct extends Product {
     public int getPrice() {
         return basePrice * (100 - discountPercent) / 100;
     }
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
+
     @Override
     public String toString() {
         return name + ": " + getPrice() + " (" + discountPercent + "%)";
