@@ -12,30 +12,21 @@ public class Product implements Searchable {
         }
 
         this.name = name;
-
     }
-
     public String getName() {
         return name;
     }
-
-
-
     @Override
     public String getSearchTerm() {
         return name;  // search term — имя продукта
     }
-
     @Override
     public String getType() {
         return "PRODUCT";
     }
-
-
     public int getPrice() {
         return 0;
     }
-
     @Override
     public String toString() {
         return null;

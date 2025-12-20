@@ -4,24 +4,18 @@ import org.skypro.skyshop.product.Product;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class SearchEngine {
-    private List<Product> catalog = new ArrayList<>();
 
-    // Метод для добавления продукта в каталог
-    public void addToCatalog(Product product) {
-        catalog.add(product);
-    }
+    public TreeMap<String, Searchable> search(List<Searchable> items) {
+        TreeMap<String, Searchable> sortedResults = new TreeMap<>();
 
-    // Обновленный метод поиска
-    public List<Product> search(String keyword) {
-        List<Product> results = new ArrayList<>();
-        for (Product p : catalog) {
-            if (p.getName().contains(keyword)) { // Простое условие поиска по части названия
-                results.add(p);
-            }
+        for (Searchable item : items) {
+            sortedResults.put(item.getName(), item);
         }
-        return results;
+        return sortedResults;
     }
-
 }
+
+
