@@ -10,8 +10,8 @@ import org.skypro.skyshop.searchable.BestResultNotFound;
 import org.skypro.skyshop.searchable.SearchEngine;
 import org.skypro.skyshop.searchable.Searchable;
 
+import java.util.Comparator;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class App {
@@ -43,15 +43,29 @@ public class App {
 
         // Поиск и сортировка
         SearchEngine engine = new SearchEngine();
-        List<Searchable> allItems = new ArrayList<>(basket.listAllProducts().stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList()));
 
-        TreeMap<String, Searchable> sortedResult = engine.search(allItems);
+        // Добавляем продукты
+        engine.addProduct(new SimpleProduct("Яблоко", 50));
+        engine.addProduct(new DiscountedProduct("Хлеб", 30, 20));
+        engine.addProduct(new FixPriceProduct("Молоко"));
+        engine.addProduct(new FixPriceProduct("Молоко")); // дубликат по имени, не добавится
 
-        // Печать отсортированного результата
-        for (var entry : sortedResult.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+
+        // Поиск по тексту "продукт"
+        Set<Searchable> resultsProduct = engine.search("Хлеб");
+        System.out.println("Результаты поиска по 'продукт':");
+        for (Searchable s : resultsProduct) {
+            // Печать через toString без вывода имени из Searchable (имя есть в toString)
+            System.out.println(s);
+        }
+
+        System.out.println();
+
+        // Поиск по тексту "статья"
+        Set<Searchable> resultsArticle = engine.search("Молоко");
+        System.out.println("Результаты поиска по 'статья':");
+        for (Searchable s : resultsArticle) {
+            System.out.println(s);
         }
     }
 }
