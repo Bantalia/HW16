@@ -10,17 +10,15 @@ import org.skypro.skyshop.searchable.BestResultNotFound;
 import org.skypro.skyshop.searchable.SearchEngine;
 import org.skypro.skyshop.searchable.Searchable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
+import java.util.*;
 
 
 public class App {
     public static void main(String[] args) {
         System.out.println("Интернет-магазин!");
 
-
         ProductBasket basket = new ProductBasket();
-
 
         // Создаем продукты
 
@@ -31,55 +29,45 @@ public class App {
         Product butter = new FixPriceProduct("Масло");
         Product orange = new SimpleProduct("Апельсин", 60);
 
-
         // Добавляем продукты в корзину
-        basket.add(apple);
-        basket.add(bread);
-        basket.add(milk);
-        basket.add(cheese);
-        basket.add(butter);
-        basket.add(orange);
-        basket.add(apple);
+        basket.add(new SimpleProduct("Яблоко", 50));
+        basket.add(new DiscountedProduct("Хлеб", 30, 20));
+        basket.add(new FixPriceProduct("Молоко"));
+        basket.add(new DiscountedProduct("Сыр", 100, 20));
+        basket.add(new FixPriceProduct("Масло"));
+        basket.add(new SimpleProduct("Апельсин", 60));
+        // Дублирование товара
+        basket.add(new SimpleProduct("Яблоко", 80));
+        basket.add(new DiscountedProduct("Хлеб", 50, 0));
+        basket.add(new SimpleProduct("Апельсин", 100));
 
-        System.out.println("Перед удалением:");
-        basket.printBasket();
-
-// Удаляем существующие яблоки ("Яблоко")
-        List<Product> deletedProducts = basket.removeByName("Яблоко");
-        System.out.println("\\nУдалены продукты:");
-        for (Product p : deletedProducts) {
-            System.out.println(p.toString());
-        }
-
-        System.out.println("\\nПосле удаления Apple:");
-        basket.printBasket();
-
-        // Проверяем удаление несуществующего продукта
-        deletedProducts.clear();
-        deletedProducts = basket.removeByName("Melon"); // Нет в корзине
-        if (deletedProducts.isEmpty()) {
-            System.out.println("\\nСписок удалённых продуктов пуст.");
-        }
-
-        System.out.println("\\nФинальное состояние корзины:");
-        basket.printBasket();
-
-
-        // Поиск (SearchEngine)
-        // Добавляем товары в поисковик
+        // Поиск и сортировка
         SearchEngine engine = new SearchEngine();
-        engine.addToCatalog(new Product("Яблоко"));
-        engine.addToCatalog(new Product("Хлеб"));
-        engine.addToCatalog(new Product("Молоко"));
-        engine.addToCatalog(new Product("Масло"));
 
-// Поиск всех подходящих товаров
-        System.out.println("\nРезультаты поиска по запросу 'Молоко':");
-        List<Product> foundProducts = engine.search("Молоко");
-        for (Product p : foundProducts) {
-            System.out.println(p.toString());
+        // Добавляем продукты
+        engine.addProduct(new SimpleProduct("Яблоко", 50));
+        engine.addProduct(new DiscountedProduct("Хлеб", 30, 20));
+        engine.addProduct(new FixPriceProduct("Молоко"));
+        engine.addProduct(new FixPriceProduct("Молоко")); // дубликат по имени, не добавится
+
+
+        // Поиск по тексту "продукт"
+        Set<Searchable> resultsProduct = engine.search("Хлеб");
+        System.out.println("Результаты поиска по 'продукт':");
+        for (Searchable s : resultsProduct) {
+            // Печать через toString без вывода имени из Searchable (имя есть в toString)
+            System.out.println(s);
         }
 
+        System.out.println();
+
+        // Поиск по тексту "статья"
+        Set<Searchable> resultsArticle = engine.search("Молоко");
+        System.out.println("Результаты поиска по 'статья':");
+        for (Searchable s : resultsArticle) {
+            System.out.println(s);
+        }
     }
 }
+
 
