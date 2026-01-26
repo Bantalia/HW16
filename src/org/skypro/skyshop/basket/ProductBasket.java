@@ -3,6 +3,7 @@ package org.skypro.skyshop.basket;
 import org.skypro.skyshop.product.Product;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductBasket {
     private Map<String, List<Product>> products = new HashMap<>();
@@ -12,7 +13,6 @@ public class ProductBasket {
         String name = product.getName();
         products.computeIfAbsent(name, k -> new ArrayList<>()).add(product);
     }
-
 
     // Метод удаления товара по имени
     public void removeProduct(String name) {
@@ -24,9 +24,24 @@ public class ProductBasket {
         return products.getOrDefault(name, Collections.emptyList());
     }
 
-    public Collection<List<Product>> listAllProducts() {
-        return products.values();
+    // Метод подсчёта полной стоимости корзины с использованием StreamAPI
+    public int getTotalPrice() {
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
     }
+
+    public List<Product> getAllProducts() {
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+    public void printBasket() {
+        products.values().stream()
+                .flatMap(Collection::stream)
+                .forEach(System.out::println);
+            }
 
     @Override
     public String toString() {

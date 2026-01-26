@@ -2,11 +2,13 @@ package org.skypro.skyshop.searchable;
 
 import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.product.Product;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.*;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 
 public class SearchEngine {
@@ -35,22 +37,11 @@ public class SearchEngine {
     }
 
     // Метод поиска по вхождению текста в имя (регистр игнорируем)
-    public Set<Searchable> search(String text) {
-        String lower = text.toLowerCase();
-        Set<Searchable> results = new TreeSet<>(comparator);
-
-        for (Product p : products) {
-            if (p.getName().toLowerCase().contains(lower)) {
-                results.add(p);
-            }
-        }
-        for (Article a : articles) {
-            if (a.getName().toLowerCase().contains(lower)) {
-                results.add(a);
-            }
-        }
-
-        return results;
+    public Set<Product> search(String query) {
+        return products.stream()
+                .filter(p -> p.getName().contains(query))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(comparator)));
     }
 }
+
 

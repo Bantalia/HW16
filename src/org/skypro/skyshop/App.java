@@ -48,26 +48,16 @@ public class App {
         engine.addProduct(new SimpleProduct("Яблоко", 50));
         engine.addProduct(new DiscountedProduct("Хлеб", 30, 20));
         engine.addProduct(new FixPriceProduct("Молоко"));
-        engine.addProduct(new FixPriceProduct("Молоко")); // дубликат по имени, не добавится
+        engine.addProduct(new SimpleProduct("Апельсин", 60));
 
 
-        // Поиск по тексту "продукт"
-        Set<Searchable> resultsProduct = engine.search("Хлеб");
-        System.out.println("Результаты поиска по 'продукт':");
-        for (Searchable s : resultsProduct) {
-            // Печать через toString без вывода имени из Searchable (имя есть в toString)
-            System.out.println(s);
-        }
+        engine.search("Апельсин").forEach(System.out::println);
 
-        System.out.println();
 
-        // Поиск по тексту "статья"
-        Set<Searchable> resultsArticle = engine.search("Молоко");
-        System.out.println("Результаты поиска по 'статья':");
-        for (Searchable s : resultsArticle) {
-            System.out.println(s);
-        }
     }
+
+
 }
+
 
 

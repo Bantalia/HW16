@@ -31,11 +31,9 @@ public abstract class Product implements Searchable {
     public String getType() {
         return "PRODUCT";
     }
-
     public int getPrice() {
         return 0;
     }
-
     @Override
     public String toString() {
         return null;
