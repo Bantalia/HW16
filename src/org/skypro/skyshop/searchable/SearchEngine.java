@@ -1,7 +1,9 @@
 package org.skypro.skyshop.searchable;
 
+
 import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.product.Product;
+
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,30 +19,39 @@ public class SearchEngine {
     private Set<Product> products = new HashSet<>();
     private Set<Article> articles = new HashSet<>();
 
-    // Компаратор для сортировки результатов поиска
-    private final Comparator<Searchable> comparator = (s1, s2) -> {
-        int lengthCompare = Integer.compare(s2.getName().length(), s1.getName().length());
-        if (lengthCompare != 0) {
-            return lengthCompare;
+        private final Comparator<Searchable> comparator = new SearchableComparator();
+    public class SearchableComparator implements Comparator<Searchable> {
+        @Override
+        public int compare(Searchable s1, Searchable s2) {
+            int lengthCompare = Integer.compare(s2.getName().length(), s1.getName().length());
+            if (lengthCompare != 0) {
+                return lengthCompare;
+            }
+            return s1.getName().compareTo(s2.getName());
         }
-        return s1.getName().compareTo(s2.getName());
-    };
-
-    // Добавление продукта
-    public boolean addProduct(Product product) {
-        return products.add(product);
     }
 
-    // Добавление статьи
-    public boolean addArticle(Article article) {
-        return articles.add(article);
-    }
+        // Добавление продукта
+        public boolean addProduct(Product product) {
+            return products.add(product);
+        }
 
-    // Метод поиска по вхождению текста в имя (регистр игнорируем)
-    public Set<Product> search(String query) {
-        return products.stream()
-                .filter(p -> p.getName().contains(query))
-                .collect(Collectors.toCollection(() -> new TreeSet<>(comparator)));
+        // Добавление статьи
+        public boolean addArticle(Article article) {
+            return articles.add(article);
+        }
+
+        // Создаем результат, используя TreeSet с компаратором
+        public Set<Product> search(String query) {
+            String lowerQuery = query.toLowerCase();
+            Set<Product> результаты = new TreeSet<>( (o1, o2) -> comparator.compare(o1, o2));
+            for (Product p : products) {
+                if (p.getName().toLowerCase().contains(lowerQuery)) {
+                    результаты.add(p);
+                }
+            }
+            return результаты;
+
     }
 }
 

@@ -12,6 +12,7 @@ import org.skypro.skyshop.searchable.Searchable;
 
 import java.util.Comparator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class App {
@@ -42,21 +43,30 @@ public class App {
         basket.add(new SimpleProduct("Апельсин", 100));
 
         // Поиск и сортировка
-        SearchEngine engine = new SearchEngine();
+        Set<Product> products = new HashSet<>();
 
         // Добавляем продукты
+        products.add(new SimpleProduct("Яблоко", 50));
+        products.add(new DiscountedProduct("Хлеб", 30, 20));
+        products.add(new FixPriceProduct("Молоко"));
+        products.add(new SimpleProduct("Апельсин", 60));
+
+
+        SearchEngine engine = new SearchEngine();
+// Добавляем продукты
         engine.addProduct(new SimpleProduct("Яблоко", 50));
         engine.addProduct(new DiscountedProduct("Хлеб", 30, 20));
         engine.addProduct(new FixPriceProduct("Молоко"));
         engine.addProduct(new SimpleProduct("Апельсин", 60));
 
+// Поиск и вывод результатов
+        Set<Product> foundProducts = engine.search("Апельсин");
 
-        engine.search("Апельсин").forEach(System.out::println);
-
-
+        System.out.println("Результаты поиска:");
+        for (Product product : foundProducts) {
+            System.out.println(product.getName());
+        }
     }
-
-
 }
 
 

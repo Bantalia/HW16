@@ -1,5 +1,6 @@
 package org.skypro.skyshop.searchable;
 
+
 import java.util.List;
 
 public interface Searchable {
