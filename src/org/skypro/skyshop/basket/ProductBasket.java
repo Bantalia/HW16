@@ -2,42 +2,60 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductBasket {
-    private List<Product> products = new ArrayList<>();
+    private Map<String, List<Product>> products = new HashMap<>();
 
     // Метод добавления товара в корзину
     public void add(Product product) {
-        this.products.add(product);
+        String name = product.getName();
+        products.computeIfAbsent(name, k -> new ArrayList<>()).add(product);
     }
 
-    public List<Product> removeByName(String name) {
-        List<Product> removed = new ArrayList<>();
-        Iterator<Product> iterator = products.iterator();
-        while (iterator.hasNext()) {
-            Product product = iterator.next();
-            if (product.getName().equals(name)) {
-                removed.add(product);
-                iterator.remove();
+    // Метод удаления товара по имени
+    public void removeProduct(String name) {
+        products.remove(name);
+    }
+
+    // Получение товаров по имени
+    public List<Product> getProductsByName(String name) {
+        return products.getOrDefault(name, Collections.emptyList());
+    }
+
+    // Метод подсчёта полной стоимости корзины с использованием StreamAPI
+    public int getTotalPrice() {
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
+    }
+
+    public List<Product> getAllProducts() {
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+    public void printBasket() {
+        products.values().stream()
+                .flatMap(Collection::stream)
+                .forEach(System.out::println);
+            }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (var entry : products.entrySet()) {
+            var key = entry.getKey();  // Имя товара
+            var value = entry.getValue();  // Список товаров с данным именем
+
+            sb.append(key + ": ");
+            for (Product p : value) {
+                sb.append(p.toString() + ", ");
             }
         }
-        return removed;
+        return sb.toString();
     }
-
-    // Метод вывода содержимого корзины
-    public void printBasket() {
-        if (products.isEmpty()) {
-            System.out.println("Корзина пустая");
-            return;
-        }
-        System.out.println("Текущие товары в корзине:");
-        for (Product p : products) {
-            System.out.println(p.toString());
-        }
-    }
-
 }
 

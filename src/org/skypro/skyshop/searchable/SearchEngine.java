@@ -1,27 +1,48 @@
 package org.skypro.skyshop.searchable;
 
+
+import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.product.Product;
 
-import java.util.List;
-import java.util.ArrayList;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.*;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 
 public class SearchEngine {
-    private List<Product> catalog = new ArrayList<>();
 
-    // Метод для добавления продукта в каталог
-    public void addToCatalog(Product product) {
-        catalog.add(product);
-    }
+    // Храним продукты и статьи в HashSet, чтобы избежать дубликатов
+    private Set<Product> products = new HashSet<>();
+    private Set<Article> articles = new HashSet<>();
 
-    // Обновленный метод поиска
-    public List<Product> search(String keyword) {
-        List<Product> results = new ArrayList<>();
-        for (Product p : catalog) {
-            if (p.getName().contains(keyword)) { // Простое условие поиска по части названия
-                results.add(p);
-            }
+        private final Comparator<Searchable> comparator = new SearchableComparator();
+
+        // Добавление продукта
+        public boolean addProduct(Product product) {
+            return products.add(product);
         }
-        return results;
-    }
 
+        // Добавление статьи
+        public boolean addArticle(Article article) {
+            return articles.add(article);
+        }
+
+        // Создаем результат, используя TreeSet с компаратором
+        public Set<Product> search(String query) {
+            String lowerQuery = query.toLowerCase();
+            Set<Product> результаты = new TreeSet<>( (o1, o2) -> comparator.compare(o1, o2));
+            for (Product p : products) {
+                if (p.getName().toLowerCase().contains(lowerQuery)) {
+                    результаты.add(p);
+                }
+            }
+            return результаты;
+
+    }
 }
+
+
